@@ -98,10 +98,7 @@ class EnhancedTable extends Component {
   state = {
     order: "asc",
     orderBy: "calories",
-    selected: [],
-    data: store,
-    page: 0,
-    rowsPerPage: 5
+    data: store
   };
 
   handleRequestSort = (event, property) => {
@@ -115,8 +112,6 @@ class EnhancedTable extends Component {
     this.setState({ order, orderBy });
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
-
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
@@ -128,7 +123,6 @@ class EnhancedTable extends Component {
         <div>
           <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
-              numSelected={selected.length}
               order={order}
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
@@ -136,16 +130,8 @@ class EnhancedTable extends Component {
             />
             <TableBody>
               {stableSort(data, getSorting(order, orderBy)).map(n => {
-                const isSelected = this.isSelected(n.id);
                 return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    aria-checked={isSelected}
-                    tabIndex={-1}
-                    key={n.id}
-                    selected={isSelected}
-                  >
+                  <TableRow hover role="checkbox" tabIndex={-1} key={n.id}>
                     <TableCell component="th" scope="row" padding="none">
                       {n.name}
                     </TableCell>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -52,7 +52,7 @@ const rows = [
   { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
 ];
 
-class EnhancedTableHead extends React.Component {
+class EnhancedTableHead extends Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
@@ -100,50 +100,14 @@ class EnhancedTableHead extends React.Component {
   }
 }
 
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit,
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  spacer: {
-    flex: '1 1 100%',
-  },
-  actions: {
-    color: theme.palette.text.secondary,
-  },
-  title: {
-    flex: '0 0 auto',
-  },
-});
 
 let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
 
   return (
     <Toolbar
-      className={classNames(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
     >
-      <div className={classes.title}>
+      <div >
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
             {numSelected} selected
@@ -154,8 +118,8 @@ let EnhancedTableToolbar = props => {
           </Typography>
         )}
       </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
+      <div/>
+      <div >
         {numSelected > 0 ? (
           <Tooltip title="Delete">
             <IconButton aria-label="Delete">
@@ -174,27 +138,9 @@ let EnhancedTableToolbar = props => {
   );
 };
 
-EnhancedTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-};
 
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-  },
-  table: {
-    minWidth: 1020,
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
-});
-
-class EnhancedTable extends React.Component {
+class EnhancedTable extends Component {
   state = {
     order: 'asc',
     orderBy: 'calories',
@@ -264,10 +210,10 @@ class EnhancedTable extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
+      <Paper >
         <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
+        <div>
+          <Table aria-labelledby="tableTitle">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -331,8 +277,6 @@ class EnhancedTable extends React.Component {
   }
 }
 
-EnhancedTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(EnhancedTable);
+
+export default EnhancedTable;

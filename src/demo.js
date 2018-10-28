@@ -59,7 +59,7 @@ class EnhancedTableHead extends Component {
   };
 
   render() {
-    const { order, orderBy, numSelected, rowCount } = this.props;
+    const { order, orderBy } = this.props;
 
     return (
       <TableHead>
@@ -113,11 +113,7 @@ class EnhancedTable extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    const { data, order, orderBy } = this.state;
     return (
       <Paper>
         <div>
@@ -142,11 +138,6 @@ class EnhancedTable extends Component {
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>

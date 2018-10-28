@@ -17,6 +17,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
+import store from "./Store";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -98,32 +99,7 @@ class EnhancedTable extends Component {
     order: "asc",
     orderBy: "calories",
     selected: [],
-    data: [
-      {
-        id: 0,
-        name: "Cupcake",
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3
-      },
-      {
-        id: 1,
-        name: "Donut",
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9
-      },
-      {
-        id: 2,
-        name: "Eclair",
-        calories: 262,
-        fat: 16.0,
-        carbs: 24,
-        protein: 6.0
-      }
-    ],
+    data: store,
     page: 0,
     rowsPerPage: 5
   };
@@ -137,14 +113,6 @@ class EnhancedTable extends Component {
     }
 
     this.setState({ order, orderBy });
-  };
-
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
   };
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -167,29 +135,27 @@ class EnhancedTable extends Component {
               rowCount={data.length}
             />
             <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.name}
-                      </TableCell>
-                      <TableCell numeric>{n.calories}</TableCell>
-                      <TableCell numeric>{n.fat}</TableCell>
-                      <TableCell numeric>{n.carbs}</TableCell>
-                      <TableCell numeric>{n.protein}</TableCell>
-                    </TableRow>
-                  );
-                })}
+              {stableSort(data, getSorting(order, orderBy)).map(n => {
+                const isSelected = this.isSelected(n.id);
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    aria-checked={isSelected}
+                    tabIndex={-1}
+                    key={n.id}
+                    selected={isSelected}
+                  >
+                    <TableCell component="th" scope="row" padding="none">
+                      {n.name}
+                    </TableCell>
+                    <TableCell numeric>{n.calories}</TableCell>
+                    <TableCell numeric>{n.fat}</TableCell>
+                    <TableCell numeric>{n.carbs}</TableCell>
+                    <TableCell numeric>{n.protein}</TableCell>
+                  </TableRow>
+                );
+              })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
@@ -198,20 +164,6 @@ class EnhancedTable extends Component {
             </TableBody>
           </Table>
         </div>
-        <TablePagination
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            "aria-label": "Previous Page"
-          }}
-          nextIconButtonProps={{
-            "aria-label": "Next Page"
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
       </Paper>
     );
   }
